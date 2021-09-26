@@ -17,7 +17,7 @@ class Contract:
         self.expires: datetime.date = expires
         self.price_rub: int = price_rub
         self.parties = [parties]
-        self.CONTRACTS.append(self)
+        Contract.CONTRACTS.append(self)
 
     def remind(self, warning=False):
         if warning:

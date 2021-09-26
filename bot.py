@@ -99,8 +99,8 @@ if __name__ == '__main__':
         return
 
 
-    def all_dateup(contract: Contract):
-        [dateup(x) for x in contract.CONTRACTS]
+    def all_dateup():
+        [dateup(x) for x in Contract.CONTRACTS]
 
     task_sheded = Timer(delta_shed.seconds,all_dateup() )
 
