@@ -1,7 +1,11 @@
+import datetime
 import os
+from threading import Timer
 
 from telegram import Update, ForceReply
 from telegram.ext import CallbackContext, Updater, CommandHandler, MessageHandler, Filters
+
+from users import Contract
 
 TOKEN = "<paste your token>"
 
@@ -77,3 +81,28 @@ class FileDialog():
 
 if __name__ == '__main__':
     main()
+
+    def dtnow():
+        return datetime.date.today()
+
+    shedule = dtnow.replace(day = dtnow.day +1,
+                           hour = 9)
+    delta_shed = shedule - dtnow
+
+    def dateup(contract: Contract):
+        #need to overwrite datetime __sub__
+        contract_daystl = dtnow() - contract.expires
+        if (contract_daystl < 7):
+            if contract_daystl < 2:
+               return f"{contract.id} почти расторгнут!!!"
+            return f"Срок действия {contract.id} скоро истечёт."
+        return
+
+
+    def all_dateup(contract: Contract):
+        [dateup(x) for x in contract.CONTRACTS]
+
+    task_sheded = Timer(delta_shed.seconds,all_dateup() )
+
+    task_sheded.start()
+

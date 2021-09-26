@@ -1,21 +1,23 @@
 import datetime
+from builtins import function
 from dataclasses import dataclass
 
 import self as self
 
 
-@dataclass
+
 class Contract:
     """The very same as smart-contract"""
     # remind and expire funs for event_loop
 
+    CONTRACTS = []
 
-expires: datetime.date
-price_rub: int
-
-    def __init__(self, contract_id, expires, *parties):
+    def __init__(self, contract_id, expires, price_rub, *parties):
         self.id = contract_id
+        self.expires: datetime.date = expires
+        self.price_rub: int = price_rub
         self.parties = [parties]
+        self.CONTRACTS.append(self)
 
     def remind(self, warning=False):
         if warning:
@@ -34,16 +36,18 @@ price_rub: int
 class Hypothec(Contract):
 
     def withdrawal(self):
-        #Выселяем
         pass
 
 
 @dataclass
 class User:
-    #licencies, passports, DNK signature
-    proof: str
-    tg_id:str
-    contracts: Contract()
+    """Anyone who enters the bot area:
+    borrowers, bank and insurence agents
+    """
+    money: int
+    proof: str           #licencies, passports, DNK signature
+    tg_id: str
+    contracts: Contract = ()
 
     def proof(self):
         pass
@@ -51,11 +55,15 @@ class User:
     def view_contract(self):
         return self.contracts
 
+    def pay(amount, reciever, *callback: function):
+        self.money -= amount
+        reciever.money += 0.99 * amount
+        callback()
 
-@dataclass
+
 class Representer(User):
-    companie_name: str
     contracts = ()
+    companie_name: str
 
 
 class Bank(Representer):
@@ -68,15 +76,17 @@ class Bank(Representer):
         self.contracts.remove(contract)
 
 
-@dataclass()
 class InsuranceCompanie(Representer):
 
     slogan = "/n Мы стали надёжней!!!"
 
-    def __init__(self, companie):
+    def __init__(self, companie_name):
         super(InsuranceCompanie, self).__init__()
         ads = self.companie_name + self.slogan
 
     def wall_customers(self):
-        #всем кастомерам предложение от компаний
+        #proposition to all customers
         pass
+
+
+
