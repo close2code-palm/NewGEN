@@ -1,4 +1,7 @@
+import datetime
 from dataclasses import dataclass
+
+import self as self
 
 
 @dataclass
@@ -7,12 +10,19 @@ class Contract:
     # remind and expire funs for event_loop
 
 
+expires: datetime.date
+price_rub: int
+
     def __init__(self, contract_id, expires, *parties):
         self.id = contract_id
         self.parties = [parties]
 
-    def remind(self):
-        pass
+    def remind(self, warning=False):
+        if warning:
+            return f"{self.__class__} {self.id} почти расторгнут!!!"
+        else:
+            return f"срок действия договора {self.id} скоро истечёт."
+
 
     def __del__(self):
         #expires or break or occurance
@@ -44,22 +54,18 @@ class User:
 
 @dataclass
 class Representer(User):
-    companie: str
-    contracts = []
+    companie_name: str
+    contracts = ()
 
 
-class Bank:
-    pass
-
-
-@dataclass
 class Bank(Representer):
 
     def __init__(self):
         super().__init__()
 
-    def resell(self, contract, acquirer: Bank):
-        acquirer.contract
+    def resell(self, contract, acquirer: __init__):
+        acquirer.contract.append(contract)
+        self.contracts.remove(contract)
 
 
 @dataclass()
@@ -69,7 +75,7 @@ class InsuranceCompanie(Representer):
 
     def __init__(self, companie):
         super(InsuranceCompanie, self).__init__()
-        ads = self.companie + self.slogan
+        ads = self.companie_name + self.slogan
 
     def wall_customers(self):
         #всем кастомерам предложение от компаний
