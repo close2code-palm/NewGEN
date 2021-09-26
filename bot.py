@@ -1,8 +1,10 @@
 import datetime
 import os
+import random
 from threading import Timer
 
-from telegram import Update, ForceReply
+import telegram
+from telegram import Update, ForceReply, Bot
 from telegram.ext import CallbackContext, Updater, CommandHandler, MessageHandler, Filters
 
 from users import Contract
@@ -102,7 +104,19 @@ if __name__ == '__main__':
     def all_dateup():
         [dateup(x) for x in Contract.CONTRACTS]
 
-    task_sheded = Timer(delta_shed.seconds,all_dateup() )
+    def all_users_ads(database):
+        updater = Updater(TOKEN)
+        users_id = database.do("SELECT id FROM users"
+                            "WHERE role = 'User'")
+        insurance_companies_names = database.do("SELECT name FROM users"
+                                          "where role = 'IsnuranceCompany'")
+
+        for tg_id in users_id:
+            ad_ins = random.choice(insurance_companies_names)
+            telegram.Bot.send_message(tg_id, ad_ins)
+
+
+    task_sheded = Timer(delta_shed.seconds,[all_dateup(), all_users_ads()] )
 
     task_sheded.start()
 

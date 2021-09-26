@@ -19,11 +19,13 @@ class Contract:
         self.parties = [parties]
         Contract.CONTRACTS.append(self)
 
-    def remind(self, warning=False):
-        if warning:
-            return f"{self.__class__} {self.id} почти расторгнут!!!"
-        else:
-            return f"срок действия договора {self.id} скоро истечёт."
+
+    # def remind(self, warning=False):
+    #     if warning:
+    #         return f"{self.__class__} {self.id} почти расторгнут!!!"
+    #     else:
+    #         return f"срок действия договора {self.id} скоро истечёт."
+    # in bot.py main
 
 
     def __del__(self):
@@ -45,9 +47,15 @@ class User:
     borrowers, bank and insurence agents
     """
     money: int
-    proof: str           #licencies, passports, DNK signature
+    proof: bool           #licencies, passports, DNA signatures
     tg_id: str
     contracts: Contract = ()
+
+def register(self, database):
+    save_statement = f"INSERT INTO users(id, proof, role)" \
+                     f"VALUES ({self.tg_id, self.proof, self.__class__})"
+    database.do(save_statement)
+
 
     def proof(self):
         pass
@@ -76,15 +84,15 @@ class Bank(Representer):
         self.contracts.remove(contract)
 
 
-class InsuranceCompanie(Representer):
+class InsuranceCompany(Representer):
 
     slogan = "/n Мы стали надёжней!!!"
 
     def __init__(self, companie_name):
-        super(InsuranceCompanie, self).__init__()
-        ads = self.companie_name + self.slogan
+        super(InsuranceCompany, self).__init__()
+        self.ad = companie_name + self.slogan
 
-    def wall_customers(self):
+    def wall_customers(self, ):
         #proposition to all customers
         pass
 
